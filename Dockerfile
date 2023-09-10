@@ -4,4 +4,4 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 EXPOSE 4000
-CMD python ./app.py
+CMD python ./Severity_score.py
