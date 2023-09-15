@@ -6,14 +6,15 @@ from sklearn.svm import SVC
 from sklearn.metrics import f1_score, accuracy_score, confusion_matrix
 from flask import Flask,jsonify
 from flask import request
+from flask_cors import CORS, cross_origin
 
 
 #reading csv files
 
-df = pd.read_csv('diseases_dataset\dataset.csv')
+df = pd.read_csv('./diseases_dataset/dataset.csv')
 # print(df.head())
 # df.describe()
-df1 = pd.read_csv('diseases_dataset\Symptom-severity.csv')
+df1 = pd.read_csv('./diseases_dataset/Symptom-severity.csv')
 # print(df1.head())
 
 
@@ -134,6 +135,7 @@ def predict_disease(patient_symptoms):
 # GET json with symptoms
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/",methods=['POST','GET'])
 
@@ -142,11 +144,8 @@ def  receive_symptoms():
     
     data = request.get_json("")
     patient_symptoms=data
-
-
-def send_predictions():
     disease_prediction=predict_disease(patient_symptoms)[0]
-    temp_df=pd.read_csv("diseases_dataset\severity.csv")
+    temp_df=pd.read_csv("./diseases_dataset/severity.csv")
     estimated_doc_time=temp_df[temp_df.disease==disease_prediction]["time"].values[0]
     severity=temp_df[temp_df.disease==disease_prediction]["severity"].values[0]
     spec=temp_df[temp_df.disease==disease_prediction]["specialisation"].values[0]
