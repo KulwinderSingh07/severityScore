@@ -137,6 +137,11 @@ def predict_disease(patient_symptoms):
 app = Flask(__name__)
 CORS(app)
 
+
+@app.route("/healthCheck",methods=['POST','GET'])
+def healthCheck():
+    return "Hello World"
+
 @app.route("/",methods=['POST','GET'])
 
 def  receive_symptoms():
@@ -144,7 +149,8 @@ def  receive_symptoms():
     
     data = request.get_json("")
     patient_symptoms=data
-    disease_prediction=predict_disease(patient_symptoms)[0]
+    print(patient_symptoms['symptoms'])
+    disease_prediction=predict_disease(patient_symptoms['symptoms'])[0]
     temp_df=pd.read_csv("./diseases_dataset/severity.csv")
     estimated_doc_time=temp_df[temp_df.disease==disease_prediction]["time"].values[0]
     severity=temp_df[temp_df.disease==disease_prediction]["severity"].values[0]
